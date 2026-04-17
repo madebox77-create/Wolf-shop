@@ -3,20 +3,18 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import firebaseConfig from '../firebase-applet-config.json';
-
-// Initialize Firebase configuration with fallback to environment variables for Vercel deployment
+// Initialize Firebase configuration with the user-provided keys
 const config = {
-  apiKey: firebaseConfig.apiKey || import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: firebaseConfig.authDomain || import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: firebaseConfig.projectId || import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: firebaseConfig.storageBucket || import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: firebaseConfig.messagingSenderId || import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: firebaseConfig.appId || import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: firebaseConfig.measurementId || import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyBazKvDqauUyaPP-zv1F6sku3IlxGg8pYw",
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "wolf-bc7ae.firebaseapp.com",
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "wolf-bc7ae",
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "wolf-bc7ae.firebasestorage.app",
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "764680226456",
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:764680226456:web:387bea4e8e707a1ba1f2ed",
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || "G-H3LEVZJZBP",
 };
 
-const databaseId = firebaseConfig.firestoreDatabaseId || import.meta.env.VITE_FIREBASE_FIRESTORE_DATABASE_ID || "(default)";
+const databaseId = import.meta.env.VITE_FIREBASE_FIRESTORE_DATABASE_ID || "(default)";
 
 // Initialize Firebase SDK
 const app = initializeApp(config);

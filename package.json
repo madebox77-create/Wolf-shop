@@ -11,7 +11,7 @@
     "lint": "tsc --noEmit"
   },
   "engines": {
-    "node": ">=20"
+    "node": "20.x"
   },
   "dependencies": {
     "@google/genai": "^1.49.0",
