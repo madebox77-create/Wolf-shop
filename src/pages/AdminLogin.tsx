@@ -59,22 +59,33 @@ export const AdminLogin: React.FC = () => {
   const handleGoogleLogin = async () => {
     setLoading(true);
     setError(null);
+    
+    // Safety timeout to reset loading state if popup is blocked
+    const timeout = setTimeout(() => {
+      setLoading(false);
+      setError('The authentication window is taking too long. Please make sure pop-ups are allowed and that you have opened the app in a new tab.');
+    }, 30000);
+
     try {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
+      clearTimeout(timeout);
       
       if (result.user && isAdminEmail(result.user.email)) {
         toast.success('Welcome Alpha Admin');
         navigate('/admin');
       } else {
         await firebaseSignOut(auth);
-        setError('Unauthorized: This account does not have administrative access.');
+        setError('Unauthorized: This account (' + result.user.email + ') does not have administrative access.');
         setLoading(false);
       }
     } catch (err: any) {
+      clearTimeout(timeout);
       console.error('Admin Google Auth error:', err);
       if (err.code === 'auth/unauthorized-domain') {
         setError('DOMAIN ERROR: This URL is not allowed by Firebase. Go to Firebase Console -> Auth -> Settings -> Authorized domains and add this URL.');
+      } else if (err.code === 'auth/popup-closed-by-user') {
+        setError('Login cancelled. Please try again.');
       } else if (err.code === 'auth/operation-not-allowed') {
         setError('Google sign-in is not enabled. Please enable it in the Firebase Console.');
       } else {
