@@ -73,7 +73,9 @@ export const AdminLogin: React.FC = () => {
       }
     } catch (err: any) {
       console.error('Admin Google Auth error:', err);
-      if (err.code === 'auth/operation-not-allowed') {
+      if (err.code === 'auth/unauthorized-domain') {
+        setError('DOMAIN ERROR: This URL is not allowed by Firebase. Go to Firebase Console -> Auth -> Settings -> Authorized domains and add this URL.');
+      } else if (err.code === 'auth/operation-not-allowed') {
         setError('Google sign-in is not enabled. Please enable it in the Firebase Console.');
       } else {
         setError(err.message || 'An error occurred during Google authentication.');
