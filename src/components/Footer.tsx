@@ -33,6 +33,7 @@ export const Footer: React.FC = () => {
             <li><Link to="/contact" className="hover:text-red-600 transition-colors">Contact Us</Link></li>
             <li><Link to="/support" className="hover:text-red-600 transition-colors">Support Center</Link></li>
             <li><Link to="/faq" className="hover:text-red-600 transition-colors">FAQ</Link></li>
+            <li><Link to="/admin/login" className="text-red-600 hover:underline transition-colors mt-4 block">Admin Area</Link></li>
           </ul>
         </div>
 

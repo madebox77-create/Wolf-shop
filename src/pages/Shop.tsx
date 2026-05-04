@@ -5,7 +5,7 @@ import { CATEGORIES } from '../data';
 import { ProductCard } from '../components/ProductCard';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
-import { getProducts } from '../services/database';
+import { productService } from '../services/productService';
 import { Product } from '../types';
 
 export const Shop: React.FC = () => {
@@ -19,7 +19,7 @@ export const Shop: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    const unsubscribe = getProducts(setProducts);
+    const unsubscribe = productService.subscribeProducts(setProducts);
     return () => unsubscribe();
   }, []);
 

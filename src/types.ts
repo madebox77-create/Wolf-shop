@@ -5,21 +5,22 @@ export interface Product {
   description: string;
   category: string;
   image: string;
-  images: string[];
-  rating: number;
-  reviews: number;
-  stock: number;
+  images?: string[];
+  rating?: number;
+  reviews?: number;
+  stock?: number;
   featured?: boolean;
   affiliateLink?: string;
   clicks?: number;
-  lastClicked?: string;
+  lastClickedAt?: any;
 }
 
 export interface Banner {
   id: string;
   title: string;
   description: string;
-  images: string[];
+  imageUrl: string;
+  isActive?: boolean;
 }
 
 export interface CartItem extends Product {

@@ -1,11 +1,9 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { auth, db } from '../firebase';
 import { 
   onAuthStateChanged, 
   User, 
   signOut,
-  GoogleAuthProvider,
-  signInWithPopup
 } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 
@@ -69,19 +67,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return () => unsubscribe();
   }, []);
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     await signOut(auth);
     setUser(null);
     setNeedsVerification(false);
-  };
+    localStorage.removeItem('is_wolf_admin');
+  }, []);
 
-  const openAuthModal = () => setIsAuthModalOpen(true);
-  const closeAuthModal = () => {
+  const openAuthModal = useCallback(() => setIsAuthModalOpen(true), []);
+  const closeAuthModal = useCallback(() => {
     setIsAuthModalOpen(false);
     if (!user) {
       setNeedsVerification(false);
     }
-  };
+  }, [user]);
 
   return (
     <AuthContext.Provider value={{ 

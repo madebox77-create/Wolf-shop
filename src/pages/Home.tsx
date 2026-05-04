@@ -18,19 +18,18 @@ import { motion, AnimatePresence } from 'motion/react';
 import { PRODUCTS, CATEGORIES } from '../data';
 import { ProductCard } from '../components/ProductCard';
 import { cn } from '../lib/utils';
-import { getProducts, getBanners } from '../services/database';
-import { Product, Banner } from '../types';
+import { productService, Product as AffiliateProduct, Banner as AffiliateBanner } from '../services/productService';
 
 export const Home: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [heroIndex, setHeroIndex] = useState(0);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [banners, setBanners] = useState<Banner[]>([]);
+  const [products, setProducts] = useState<AffiliateProduct[]>([]);
+  const [banners, setBanners] = useState<AffiliateBanner[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const unsubscribeProducts = getProducts(setProducts);
-    const unsubscribeBanners = getBanners(setBanners);
+    const unsubscribeProducts = productService.subscribeProducts(setProducts);
+    const unsubscribeBanners = productService.subscribeBanners(setBanners);
     return () => {
       unsubscribeProducts();
       unsubscribeBanners();
@@ -41,9 +40,9 @@ export const Home: React.FC = () => {
     id: b.id,
     title: b.title,
     subtitle: b.description,
-    image: b.images[0] || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=1000',
-    badge: "New Drops",
-    cta: "Shop Now",
+    image: b.imageUrl,
+    badge: "Special Offer",
+    cta: "Check it out",
     link: "/shop"
   })) : [
     {

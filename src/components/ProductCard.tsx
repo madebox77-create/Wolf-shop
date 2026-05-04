@@ -5,7 +5,7 @@ import { Product } from '../types';
 import { useCart } from '../context/CartContext';
 import { motion } from 'motion/react';
 import { cn } from '../lib/utils';
-import { trackClick } from '../services/database';
+import { productService } from '../services/productService';
 
 interface ProductCardProps {
   product: Product;
@@ -17,7 +17,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const handleBuyNow = async (e: React.MouseEvent) => {
     e.preventDefault();
     if (product.affiliateLink) {
-      await trackClick(product.id);
+      if (product.id) {
+        await productService.trackClick(product.id);
+      }
       window.open(product.affiliateLink, '_blank');
     } else {
       addToCart(product);

@@ -13,6 +13,13 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, adminO
   const { user, loading } = useAuth();
   const location = useLocation();
 
+  // Fast check for hardcoded admin session
+  const isWolfAdmin = localStorage.getItem('is_wolf_admin') === 'true';
+
+  if (isWolfAdmin && adminOnly) {
+    return <>{children}</>;
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-zinc-950 flex items-center justify-center">

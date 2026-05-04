@@ -5,7 +5,7 @@ import { useCart } from '../context/CartContext';
 import { ProductCard } from '../components/ProductCard';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
-import { getProducts, trackClick } from '../services/database';
+import { productService } from '../services/productService';
 import { Product } from '../types';
 
 export const ProductDetail: React.FC = () => {
@@ -23,7 +23,7 @@ export const ProductDetail: React.FC = () => {
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   useEffect(() => {
-    const unsubscribe = getProducts(setProducts);
+    const unsubscribe = productService.subscribeProducts(setProducts);
     return () => unsubscribe();
   }, []);
 
@@ -37,7 +37,9 @@ export const ProductDetail: React.FC = () => {
   const handleBuyNow = async () => {
     if (!product) return;
     if (product.affiliateLink) {
-      await trackClick(product.id);
+      if (product.id) {
+        await productService.trackClick(product.id);
+      }
       window.open(product.affiliateLink, '_blank');
     } else {
       addToCart(product, quantity);

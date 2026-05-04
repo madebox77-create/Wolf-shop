@@ -29,6 +29,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({ onClose, onSave, initi
     category: '',
     affiliateLink: '',
     images: [] as string[],
+    stock: 100,
+    rating: 4.8,
+    featured: false
   });
   const [generating, setGenerating] = useState(false);
   const [generatedImages, setGeneratedImages] = useState<string[]>([]);
@@ -59,14 +62,18 @@ export const ProductForm: React.FC<ProductFormProps> = ({ onClose, onSave, initi
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (selectedImages.length < 1 && formData.images.length < 1) {
+    const finalImages = [...(formData.images || []), ...selectedImages];
+    if (finalImages.length < 1) {
       toast.error('Please select at least one image');
       return;
     }
     onSave({
       ...formData,
-      images: [...formData.images, ...selectedImages],
+      images: finalImages,
+      image: finalImages[0], // Essential for ProductCard
       price: parseFloat(formData.price),
+      stock: parseInt(formData.stock),
+      rating: parseFloat(formData.rating),
     });
   };
 
@@ -157,6 +164,52 @@ export const ProductForm: React.FC<ProductFormProps> = ({ onClose, onSave, initi
                     <option value="accessories">Accessories</option>
                   </select>
                 </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-4 flex items-center gap-2">
+                    Stock
+                  </label>
+                  <input
+                    type="number"
+                    value={formData.stock}
+                    onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
+                    className="w-full bg-white/5 border border-white/10 rounded-[20px] px-6 py-4 text-white focus:outline-none focus:border-red-600 transition-colors"
+                    placeholder="Stock count"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-4 flex items-center gap-2">
+                    Rating
+                  </label>
+                  <input
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    max="5"
+                    value={formData.rating}
+                    onChange={(e) => setFormData({ ...formData, rating: e.target.value })}
+                    className="w-full bg-white/5 border border-white/10 rounded-[20px] px-6 py-4 text-white focus:outline-none focus:border-red-600 transition-colors"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center gap-6 p-6 bg-white/5 rounded-[20px] border border-white/10">
+                <label className="flex items-center gap-3 cursor-pointer group">
+                  <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${
+                    formData.featured ? 'bg-red-600 border-red-600' : 'border-white/10 group-hover:border-white/30'
+                  }`}>
+                    {formData.featured && <Check size={14} className="text-white" />}
+                  </div>
+                  <input 
+                    type="checkbox" 
+                    className="hidden" 
+                    checked={formData.featured}
+                    onChange={() => setFormData({ ...formData, featured: !formData.featured })}
+                  />
+                  <span className="text-[10px] font-black uppercase tracking-widest text-white">Feature on Home</span>
+                </label>
               </div>
 
               <div className="space-y-2">
